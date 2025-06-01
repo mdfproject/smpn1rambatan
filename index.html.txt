@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Pengumuman Kelulusan UPT SMPN 1 RAMBATAN Tahun Pelajaran 2024/2025</title>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Open Sans', sans-serif;
+      text-align: center;
+      padding: 40px;
+      background: url('https://images.unsplash.com/photo-1603574911528-8b1700fdf42e?auto=format&fit=crop&w=1470&q=80') no-repeat center center fixed;
+      background-size: cover;
+    }
+    img.logo {
+      width: 140px;
+      margin-bottom: 20px;
+    }
+    h1 {
+      color: #2196f3;
+      font-size: 46px;
+      margin-bottom: 10px;
+    }
+    h2 {
+      color: #2196f3;
+      font-size: 34px;
+      margin-bottom: 30px;
+    }
+    p {
+      font-size: 18px;
+      color: #444;
+    }
+    input, select {
+      padding: 12px;
+      width: 280px;
+      font-size: 16px;
+      border: 2px solid #b2ebf2;
+      border-radius: 8px;
+      margin-top: 10px;
+    }
+    button {
+      padding: 12px 24px;
+      font-size: 16px;
+      margin-left: 10px;
+      cursor: pointer;
+      background-color: #00bcd4;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background-color: #0097a7;
+    }
+    #hasil {
+      margin-top: 30px;
+      font-size: 20px;
+      padding: 20px;
+      border-radius: 12px;
+      background: #ffffffdd;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .status-lulus {
+      color: green;
+      font-weight: bold;
+    }
+    .status-error {
+      color: red;
+    }
+    .status-tidaklulus {
+      color: red !important;
+      font-weight: bold;
+    }
+    footer {
+      margin-top: 60px;
+      font-size: 14px;
+      color: #fff;
+      background-color: #2196f3;
+      padding: 20px;
+      border-radius: 8px;
+    }
+    #countdown {
+      font-size: 24px;
+      margin-top: 20px;
+      color: #ffffff;
+      font-weight: bold;
+      background-color: rgba(244, 67, 54, 0.9);
+      padding: 15px;
+      border-radius: 10px;
+      display: inline-block;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+  </style>
+</head>
+<body>
+  <img src="https://drive.google.com/thumbnail?id=1TYnVllARnPodXcyIz_jt-h50jiEQ_eI2&sz=w300" alt="Logo Sekolah" class="logo" />
+  <h1>PENGUMUMAN KELULUSAN</h1>
+  <h2>UPT SMPN 1 RAMBATAN TAHUN PELAJARAN 2024/2025</h2>
+
+  <div id="countdown"></div>
+
+  <div id="form-area" style="display: none;">
+    <p>Masukkan NISN Anda di bawah ini:</p>
+    <input type="text" id="nisn" placeholder="Contoh: 1111111111" />
+    <button onclick="cekKelulusan()">Cek</button>
+  </div>
+
+  <div id="hasil"></div>
+
+  <p id="tanggal-buka" style="display: none;">2025-06-01T22:00:00</p>
+
+  <footer>
+    <p>&copy; 2025 SMPN 1 RAMBATAN<br>Created by Mdfproject</p>
+  </footer>
+
+  <script>
+    function mulaiCountdown() {
+      const countdownElem = document.getElementById("countdown");
+      const formArea = document.getElementById("form-area");
+      const hasil = document.getElementById("hasil");
+      const tanggalBukaText = document.getElementById("tanggal-buka").textContent;
+      const targetTime = new Date(tanggalBukaText).getTime();
+
+      const interval = setInterval(() => {
+        const now = new Date().getTime();
+        const distance = targetTime - now;
+
+        if (distance > 0) {
+          const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+          const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+          const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+          const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+          countdownElem.innerHTML = `PENGUMUMAN KELULUSAN AKAN DIBUKA DALAM: ${days} HARI, ${hours} JAM, ${minutes} MENIT, ${seconds} DETIK`;
+        } else {
+          clearInterval(interval);
+          countdownElem.style.display = "none";
+          formArea.style.display = "block";
+        }
+      }, 1000);
+    }
+
+    document.addEventListener("DOMContentLoaded", mulaiCountdown);
+
+    function formatTanggal(isoString) {
+      const dateObj = new Date(isoString);
+      const tahun = dateObj.getFullYear();
+      const bulan = ("0" + (dateObj.getMonth() + 1)).slice(-2);
+      const tanggal = ("0" + dateObj.getDate()).slice(-2);
+      return `${tahun}-${bulan}-${tanggal}`;
+    }
+
+    async function cekKelulusan() {
+      const nisn = document.getElementById("nisn").value.trim();
+      const hasil = document.getElementById("hasil");
+      hasil.innerHTML = "<em>Mencari data...</em>";
+
+      if (!nisn) {
+        hasil.innerHTML = "<span class='status-error'>Silakan masukkan NISN.</span>";
+        return;
+      }
+
+      try {
+        const response = await fetch(`https://script.google.com/macros/s/AKfycbziUGzsUJrPs0KjtVkfDDlbvQRVxCxGUBmhEdA3t3OCYt7kIT3netBAKINyPfXMtpM/exec?nisn=${nisn}`);
+        const data = await response.json();
+
+        if (data.error) {
+          hasil.innerHTML = `<span class='status-error'>${data.error}</span>`;
+        } else {
+          const statusClass = data.keterangan.toLowerCase() === 'lulus' ? 'status-lulus' : 'status-tidaklulus';
+          hasil.innerHTML = `
+  <p><strong>Nama:</strong> ${data.nama}</p>
+  <p><strong>Tempat Lahir:</strong> ${data.tempat_lahir}</p>
+  <p><strong>Tanggal Lahir:</strong> ${formatTanggal(data.tgl_lahir)}</p>
+  <p><strong>NIS:</strong> ${data.nis}</p>
+  <p><strong>NISN:</strong> ${data.nisn}</p>
+  <p><strong>Kelas:</strong> ${data.kelas}</p>
+  <p><strong>Status:</strong> <span class='${statusClass}'>${data.keterangan}</span></p>
+  <div style="text-align: justify; margin-top: 30px; background-color: #e3f2fd; padding: 15px; border-radius: 8px;">
+    <p><strong>📄 Catatan Penting:</strong></p>
+    <ol>
+      <li>Bagi peserta didik yang membutuhkan Surat Keterangan Kelulusan atau SKL Sementara, silahkan menghadap ke Wali Kelas masing-masing pada hari dan jam kerja.</li>
+      <li>Harap menggunakan Seragam Sekolah yang rapi dan sopan.</li>
+      <li>Tidak diperkenankan menggunakan kaos oblong, celana Levis dan sendal.</li>
+    </ol>
+  </div>`;
+        }
+      } catch (e) {
+        hasil.innerHTML = "<span class='status-error'>Terjadi kesalahan saat mengambil data.</span>";
+        console.error(e);
+      }
+    }
+  </script>
+</body>
+</html>
